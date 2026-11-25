@@ -27,6 +27,17 @@ def list_recipes(recipes):
     for index, recipe in enumerate(recipes, start=1):
         print(f"{index}. {recipe['name']} ({recipe['category']})")
 
+def list_recipes_with_time(recipes):
+    """Display a numbered list of recipe names."""
+    if not recipes:
+        print("\nNo recipes found.")
+        return
+    
+    print("\nRecipes")
+    print("-------")
+    for index, recipe in enumerate(recipes, start=1):
+        print(f"{index}. {recipe['name']}, Prep time: {recipe["prep_time"]} Cook time: {recipe["cook_time"]} ({recipe['category']})")
+
 
 def choose_recipe(recipes):
     """Prompt the user to select and view a recipe."""
@@ -76,7 +87,7 @@ def main():
             choose_recipe(recipes)
         elif choice == "5":
             sorted_recipes = sort_by_time(recipes)
-            list_recipes(sorted_recipes)
+            list_recipes_with_time(sorted_recipes)
         elif choice == "6":
             print("Goodbye!")
             break
