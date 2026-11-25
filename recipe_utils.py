@@ -33,3 +33,8 @@ def filter_by_category(recipes, category):
         for recipe in recipes
         if recipe["category"].lower() == category
     ]
+
+def sort_by_time(recipes):
+    """Returns a new list of the recipies with shortest cook/prep time being first"""
+    time_sort_recipies = sorted(recipes, key=lambda recipe: recipe["prep_time"] + recipe["cook_time"])
+    return time_sort_recipies
