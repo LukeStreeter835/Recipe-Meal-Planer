@@ -1,6 +1,6 @@
 """CPS 310 Recipe & Meal Planner starter application."""
 
-from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name
+from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time
 
 
 def display_recipe(recipe):
@@ -26,6 +26,17 @@ def list_recipes(recipes):
     print("-------")
     for index, recipe in enumerate(recipes, start=1):
         print(f"{index}. {recipe['name']} ({recipe['category']})")
+
+def list_recipes_with_time(recipes):
+    """Display a numbered list of recipe names."""
+    if not recipes:
+        print("\nNo recipes found.")
+        return
+    
+    print("\nRecipes")
+    print("-------")
+    for index, recipe in enumerate(recipes, start=1):
+        print(f"{index}. {recipe['name']}, Prep time: {recipe["prep_time"]} Cook time: {recipe["cook_time"]} ({recipe['category']})")
 
 
 def choose_recipe(recipes):
@@ -59,7 +70,8 @@ def main():
         print("2. Search recipes by name")
         print("3. Filter recipes by category")
         print("4. View recipe details")
-        print("5. Exit")
+        print("5. Sort recipes by time")
+        print("6. Exit")
 
         choice = input("\nChoose an option: ").strip()
 
@@ -74,6 +86,9 @@ def main():
         elif choice == "4":
             choose_recipe(recipes)
         elif choice == "5":
+            sorted_recipes = sort_by_time(recipes)
+            list_recipes_with_time(sorted_recipes)
+        elif choice == "6":
             print("Goodbye!")
             break
         else:
