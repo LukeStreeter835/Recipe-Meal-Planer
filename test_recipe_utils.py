@@ -2,7 +2,7 @@
 
 import json
 
-from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name
+from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time
 
 
 def test_search_by_name_finds_partial_match():
@@ -79,3 +79,80 @@ def test_load_recipes_reads_json(tmp_path):
     ]
     recipe_file.write_text(json.dumps(sample), encoding="utf-8")
     assert load_recipes(recipe_file) == sample
+
+def test_sort_recipes_by_time():
+    #Arange 
+    sample = [
+            {
+                "name": "Test Recipe",
+                "category": "Lunch",
+                "servings": 2,
+                "prep_time": 5,
+                "cook_time": 10,
+                "ingredients": [],
+            },
+            {
+                "name": "Test Recipe 2",
+                "category": "Breakfast",
+                "servings": 4,
+                "prep_time": 5,
+                "cook_time": 0, 
+                "ingredients": [],
+            },
+            {
+                "name": "Test Recipe 3",
+                "category": "Dinner",
+                "servings": 1,
+                "prep_time": 15,
+                "cook_time": 20, 
+                "ingredients": [],
+            },
+            {
+                "name": "Test Recipe 3",
+                "category": "Breakfast",
+                "servings": 4,
+                "prep_time": 5,
+                "cook_time": 5, 
+                "ingredients": [],
+            }
+        ]
+    expected = [
+        {
+            "name": "Test Recipe 2",
+            "category": "Breakfast",
+            "servings": 4,
+            "prep_time": 5,
+            "cook_time": 0, 
+            "ingredients": [],
+        },
+        {
+            "name": "Test Recipe 3",
+            "category": "Breakfast",
+            "servings": 4,
+            "prep_time": 5,
+            "cook_time": 5, 
+            "ingredients": [],
+        },
+        {
+            "name": "Test Recipe",
+            "category": "Lunch",
+            "servings": 2,
+            "prep_time": 5,
+            "cook_time": 10,
+            "ingredients": [],
+        },
+        {
+            "name": "Test Recipe 3",
+            "category": "Dinner",
+            "servings": 1,
+            "prep_time": 15,
+            "cook_time": 20, 
+            "ingredients": [],
+        }
+    ]
+
+    #Act 
+    new_list = sort_by_time(sample)
+
+    #Assert
+    assert new_list == expected
