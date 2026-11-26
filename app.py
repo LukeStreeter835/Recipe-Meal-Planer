@@ -1,6 +1,6 @@
 """CPS 310 Recipe & Meal Planner starter application."""
 
-from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time
+from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time, load_meal_plan
 
 
 def display_recipe(recipe):
@@ -38,6 +38,18 @@ def list_recipes_with_time(recipes):
     for index, recipe in enumerate(recipes, start=1):
         print(f"{index}. {recipe['name']}, Prep time: {recipe["prep_time"]} Cook time: {recipe["cook_time"]} ({recipe['category']})")
 
+def show_meal_plan(meal_plan):
+    if not meal_plan:
+        print("\nNo meal plan found")
+        return
+
+    print("\nMeal Plan")
+    print("-------")
+    for day in meal_plan:
+        print(f"\n{day}:")
+        for meal in meal_plan[day]:
+            display_recipe(meal)
+
 
 def choose_recipe(recipes):
     """Prompt the user to select and view a recipe."""
@@ -62,6 +74,7 @@ def main():
     """Run the starter Recipe & Meal Planner."""
     config = load_config("config.json")
     recipes = load_recipes(config["recipe_file"])
+    meal_plan = load_meal_plan(config["meal_plan_file"])
 
     while True:
         print(f"\n{config['app_title']}")
@@ -71,7 +84,8 @@ def main():
         print("3. Filter recipes by category")
         print("4. View recipe details")
         print("5. Sort recipes by time")
-        print("6. Exit")
+        print("6. View this week's meal plan")
+        print("7. Exit")
 
         choice = input("\nChoose an option: ").strip()
 
@@ -89,6 +103,8 @@ def main():
             sorted_recipes = sort_by_time(recipes)
             list_recipes_with_time(sorted_recipes)
         elif choice == "6":
+            show_meal_plan(meal_plan)
+        elif choice == "7":
             print("Goodbye!")
             break
         else:
