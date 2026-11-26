@@ -1,6 +1,6 @@
 """CPS 310 Recipe & Meal Planner starter application."""
 
-from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time, load_meal_plan
+from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time, load_meal_plan, add_meal_to_plan
 
 
 def display_recipe(recipe):
@@ -48,8 +48,31 @@ def show_meal_plan(meal_plan):
     for day in meal_plan:
         print(f"\n{day}:")
         for meal in meal_plan[day]:
-            display_recipe(meal)
+            #display_recipe(meal)
+            print(f"{meal["name"]}")
 
+def get_meal_to_add(recipes, meal_plan):
+    """Add a meal from list into a day in meal plan"""
+
+    day_choice = input("\nWhat day are you adding a meal?" \
+    "\n1.Sunday\n2.Monday\n3.Tuesday\n4.Wednesday\n5.Thursday\n6.Friday\n7.Saturday\n")
+
+    if day_choice != "1" and day_choice != "2" and day_choice != "3" and day_choice != "4" and day_choice != "5" and day_choice != "6" and day_choice != "7":
+        print("\nInvalid day of week, please choose day based on order in list (1-7).")
+        return meal_plan
+
+    list_recipes(recipes)
+    meal_choice = input("\n---------------\nPlease choose a meal to add: ")
+
+    if not meal_choice.isdigit():
+        print("Input given was not a number, please select meal by order in list.")
+    elif int(meal_choice) < 0 or int(meal_choice) > len(recipes):
+        print("Input was outsude of range of listed meals. Please select a meal on the list to add.") 
+    else:
+        meal_plan = add_meal_to_plan(meal_plan, recipes[int(meal_choice) - 1],day_choice)
+        print("Meal added succsessfully\n")   
+
+    return meal_plan 
 
 def choose_recipe(recipes):
     """Prompt the user to select and view a recipe."""
@@ -85,7 +108,8 @@ def main():
         print("4. View recipe details")
         print("5. Sort recipes by time")
         print("6. View this week's meal plan")
-        print("7. Exit")
+        print("7. Add meal to meal plan")
+        print("8. Exit")
 
         choice = input("\nChoose an option: ").strip()
 
@@ -105,6 +129,8 @@ def main():
         elif choice == "6":
             show_meal_plan(meal_plan)
         elif choice == "7":
+            meal_plan = get_meal_to_add(recipes, meal_plan)
+        elif choice == "8":
             print("Goodbye!")
             break
         else:
