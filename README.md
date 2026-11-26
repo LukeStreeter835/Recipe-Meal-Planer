@@ -11,6 +11,10 @@ The application currently supports:
 - filtering recipes by category
 - viewing recipe details
 - loading basic configuration from `config.json`
+- loading meal plan data from meal_plan JSON
+- adding but not preserving meal to plan
+- view current meal plan
+- sort and display recipes based on how long it takes to prep and cook them
 
 This is intentionally a **starter project**, not a finished application.
 
