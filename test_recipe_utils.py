@@ -2,7 +2,7 @@
 
 import json
 
-from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time
+from recipe_utils import filter_by_category, load_config, load_recipes, search_by_name, sort_by_time, load_meal_plan, add_meal_to_plan
 
 
 def test_search_by_name_finds_partial_match():
@@ -156,3 +156,63 @@ def test_sort_recipes_by_time():
 
     #Assert
     assert new_list == expected
+
+def test_load_meal_plan(tmp_path):
+    #Arrange
+    meal_plan_file = tmp_path / "meal_plan.json"
+    expected_result = {"Sunday": [],
+                        "Monday": [],
+                        "Tuesday":[],
+                        "Wednesday":[],
+                        "Thursday":[],
+                        "Friday":[],
+                        "Saturday":[]
+                }
+
+    #Act
+    meal_plan_file.write_text(json.dumps(expected_result))
+    meal_plan = load_meal_plan(meal_plan_file)
+
+    #Assert
+    assert meal_plan == expected_result
+
+def test_add_meal_plan():
+    #Arrange
+    meal_plan = {"Sunday": [],
+                    "Monday": [],
+                    "Tuesday":[],
+                    "Wednesday":[],
+                    "Thursday":[],
+                    "Friday":[],
+                    "Saturday":[]
+            }
+    new_meal = {
+                "name": "Test Recipe 3",
+                "category": "Dinner",
+                "servings": 1,
+                "prep_time": 15,
+                "cook_time": 20, 
+                "ingredients": [],
+            }
+    expected_plan = {
+        "Sunday": [],
+        "Monday": [],
+        "Tuesday":[],
+        "Wednesday":[],
+        "Thursday":[{
+                "name": "Test Recipe 3",
+                "category": "Dinner",
+                "servings": 1,
+                "prep_time": 15,
+                "cook_time": 20, 
+                "ingredients": [],
+            }],
+        "Friday":[],
+        "Saturday":[]
+    }
+
+    #Act
+    meal_plan = add_meal_to_plan(meal_plan, new_meal, "5")
+
+    #Assert
+    assert meal_plan == expected_plan
