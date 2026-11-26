@@ -14,6 +14,10 @@ def load_recipes(filename):
     with open(filename, encoding="utf-8") as file:
         return json.load(file)
 
+def load_meal_plan(filename):
+    """Load the users weekly meal plan from JSON file"""
+    with open(filename, encoding="utf-8") as file:
+        return json.load(file)
 
 def search_by_name(recipes, search_term):
     """Return recipes whose names contain the search term."""
